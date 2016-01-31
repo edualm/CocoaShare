@@ -19,6 +19,7 @@ NSString * const MEXLatteURL = @"MEXLatteURL";
 NSString * const MEXLatteUser = @"MEXLatteUser";
 NSString * const MEXLatteKey = @"MEXLatteKey";
 
+NSString * const MGMHTTPGetMethod = @"GET";
 NSString * const MGMHTTPPostMethod = @"POST";
 NSString * const MGMHTTPURLForm = @"application/x-www-form-urlencoded";
 NSString * const MGMHTTPContentType = @"content-type";
@@ -26,6 +27,11 @@ NSString * const MGMHTTPContentType = @"content-type";
 NSString * const MEXJSONKeyKey = @"key";
 NSString * const MEXJSONSuccessKey = @"success";
 NSString * const MEXJSONErrorKey = @"error";
+NSString * const MEXJSONURLKey = @"url";
+
+NSString * const MEXAPILogin = @"/api/v1/key";
+NSString * const MEXAPIVerify = @"/api/v1/key";
+NSString * const MEXAPIUpload = @"/api/v1/upload";
 
 const BOOL MGMHTTPResponseInvisible = YES;
 
@@ -44,7 +50,7 @@ const BOOL MGMHTTPResponseInvisible = YES;
 }
 - (NSView *)plugInView {
     if (view == nil) {
-        if (![NSBundle loadNibNamed:@"latteAccountPane" owner:self]) {
+        if (![NSBundle loadNibNamed:@"LatteShareAccountPane" owner:self]) {
             NSLog(@"Unable to load latteshare Account Pane");
         } else {
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -80,7 +86,7 @@ const BOOL MGMHTTPResponseInvisible = YES;
         if ([defaults objectForKey:MEXLatteURL] != nil) {
             userLoggingIn = YES;
             
-            MGMURLBasicHandler *handler = [MGMURLBasicHandler handlerWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[defaults objectForKey:MEXLatteURL]]] delegate:self];
+            MGMURLBasicHandler *handler = [MGMURLBasicHandler handlerWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@?username=%@&apiKey=%@", [defaults objectForKey:MEXLatteURL], MEXAPIVerify, [defaults objectForKey:MEXLatteUser], [defaults objectForKey:MEXLatteKey]]]] delegate:self];
             
             [handler setFailWithError:@selector(check:didFailWithError:)];
             [handler setFinish:@selector(checkDidFinish:)];
@@ -100,7 +106,7 @@ const BOOL MGMHTTPResponseInvisible = YES;
 
 - (void)login {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[defaults objectForKey:MEXLatteURL]]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [defaults objectForKey:MEXLatteURL], MEXAPILogin]]];
     
     [request setHTTPMethod:MGMHTTPPostMethod];
     [request setValue:MGMHTTPURLForm forHTTPHeaderField:MGMHTTPContentType];
@@ -134,6 +140,8 @@ const BOOL MGMHTTPResponseInvisible = YES;
     if (response != nil) {
         if ([[response objectForKey:MEXJSONSuccessKey] boolValue]) {
             if ([response objectForKey:MEXJSONKeyKey] && !userLoggingIn) {
+                [[NSUserDefaults standardUserDefaults] setObject:[response objectForKey:MEXJSONKeyKey] forKey:MEXLatteKey];
+                
                 NSAlert *alert = [[NSAlert new] autorelease];
                 
                 [alert setMessageText:[@"Login Successful" localizedFor:self]];
@@ -198,8 +206,15 @@ const BOOL MGMHTTPResponseInvisible = YES;
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
-        [defaults setObject:[urlField stringValue] forKey:MEXLatteURL];
+        NSString *url = [urlField stringValue];
+        
+        while ([url characterAtIndex:(url.length - 1)] == '/')
+            url = [url substringToIndex:(url.length - 1)];
+        
+        [defaults setObject:url forKey:MEXLatteURL];
         [defaults setObject:[userField stringValue] forKey:MEXLatteUser];
+        
+        [defaults synchronize];
         
         [self lockLogin];
         [self login];
@@ -221,7 +236,7 @@ const BOOL MGMHTTPResponseInvisible = YES;
     
     NSString *boundary = [NSString stringWithFormat:@"----Boundary+%d", (int) random() % 100000];
     
-    NSURL *uploadURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [[NSUserDefaults standardUserDefaults] objectForKey:MEXLatteURL], @"/api/upload"]];
+    NSURL *uploadURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [[NSUserDefaults standardUserDefaults] objectForKey:MEXLatteURL], MEXAPIUpload]];
     
     NSMutableURLRequest *postRequest = [NSMutableURLRequest requestWithURL:uploadURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:120.0];
     
@@ -230,8 +245,9 @@ const BOOL MGMHTTPResponseInvisible = YES;
     
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     
-    [data setObject:@"file" forKey:@"upload"];
-    [data setObject:[NSDictionary dictionaryWithObjectsAndKeys:thePath, MGMMPFPath, theName, MGMMPFName, nil] forKey:@"file"];
+    [data setObject:[[NSUserDefaults standardUserDefaults] objectForKey:MEXLatteUser] forKey:@"username"];
+    [data setObject:[[NSUserDefaults standardUserDefaults] objectForKey:MEXLatteKey] forKey:@"apiKey"];
+    [data setObject:[NSDictionary dictionaryWithObjectsAndKeys:thePath, MGMMPFPath, theName, MGMMPFName, nil] forKey:@"upload"];
     
     [postRequest setHTTPBody:[data buildMultiPartBodyWithBoundary:boundary]];
     
@@ -254,7 +270,7 @@ const BOOL MGMHTTPResponseInvisible = YES;
     
     if (response != nil) {
         if ([[response objectForKey:MEXJSONSuccessKey] boolValue]) {
-            [[MGMController sharedController] uploadFinished:[theHandler object] url:[NSURL URLWithString:[response objectForKey:MEXLatteURL]]];
+            [[MGMController sharedController] uploadFinished:[theHandler object] url:[NSURL URLWithString:[response objectForKey:MEXJSONURLKey]]];
         } else {
             NSError *error = [NSError errorWithDomain:[[NSBundle bundleForClass:[self class]] bundleIdentifier] code:1 userInfo:[NSDictionary dictionaryWithObject:[response objectForKey:MEXJSONErrorKey] forKey:NSLocalizedDescriptionKey]];
             
