@@ -13,7 +13,7 @@
 #import "MGMController.h"
 #import "MGMAddons.h"
 
-NSString * const MGMCopyright = @"Copyright (c) 2011 Mr. Gecko's Media (James Coleman). All rights reserved. http://mrgeckosmedia.com/";
+NSString * const MGMCopyright = @"Copyright (c) 2016 Eduardo Almeida (edr.io). All rights reserved.";
 
 NSString * const MEXLatteURL = @"MEXLatteURL";
 NSString * const MEXLatteUser = @"MEXLatteUser";
