@@ -105,6 +105,9 @@
 		2AEAB53712E2B68300552BAA /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 2AEAB53612E2B68300552BAA /* dsa_pub.pem */; };
 		2AEF115912F527B900F495BE /* About.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2AEF115812F527B900F495BE /* About.rtf */; };
 		2AEF118612F52A7D00F495BE /* CocoaShareIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AEF118512F52A7D00F495BE /* CocoaShareIcon.png */; };
+		6F6B88FC1C5E6502003B749B /* MEXLatteSharePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F6B88FB1C5E6502003B749B /* MEXLatteSharePlugin.m */; };
+		6F6B89011C5E675C003B749B /* LatteShareAccountPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F6B89001C5E675C003B749B /* LatteShareAccountPane.xib */; };
+		6F6B89021C5E6E78003B749B /* MGMUsers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AEAB3F112E2A57400552BAA /* MGMUsers.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -361,6 +364,12 @@
 		2AEAB53612E2B68300552BAA /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		2AEF115812F527B900F495BE /* About.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = About.rtf; sourceTree = SOURCE_ROOT; };
 		2AEF118512F52A7D00F495BE /* CocoaShareIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CocoaShareIcon.png; sourceTree = SOURCE_ROOT; };
+		6F6B88F41C5E64BF003B749B /* latteshare.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = latteshare.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F6B88F61C5E64BF003B749B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6F6B88FA1C5E6502003B749B /* MEXLatteSharePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MEXLatteSharePlugin.h; path = latteshare/MEXLatteSharePlugin.h; sourceTree = "<group>"; };
+		6F6B88FB1C5E6502003B749B /* MEXLatteSharePlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MEXLatteSharePlugin.m; path = latteshare/MEXLatteSharePlugin.m; sourceTree = "<group>"; };
+		6F6B88FF1C5E6709003B749B /* prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefix.pch; path = Classes/latteshare/prefix.pch; sourceTree = "<group>"; };
+		6F6B89001C5E675C003B749B /* LatteShareAccountPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LatteShareAccountPane.xib; path = Resources/latteshare/LatteShareAccountPane.xib; sourceTree = SOURCE_ROOT; };
 		8D1107320486CEB800E47090 /* CocoaShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocoaShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -414,6 +423,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				2ACA5CF4160E795600F294C2 /* MGMUsers.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F6B88F11C5E64BF003B749B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F6B89021C5E6E78003B749B /* MGMUsers.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,6 +489,7 @@
 				2A0501F112F49D08000F74EA /* MobileMe.bundle */,
 				2A0503C312F4D43B000F74EA /* twitpic.bundle */,
 				2ACA5CC7160E763A00F294C2 /* TinyGrab.bundle */,
+				6F6B88F41C5E64BF003B749B /* latteshare.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -481,6 +499,7 @@
 			children = (
 				2AEAB45B12E2ACEA00552BAA /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				6F6B88FD1C5E66BD003B749B /* latteshare */,
 				2AEAB48112E2ADDF00552BAA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
@@ -499,6 +518,7 @@
 				2A05020512F49DF4000F74EA /* MobileMe */,
 				2ACA5CD4160E764B00F294C2 /* TinyGrab */,
 				2A0503D312F4D4B0000F74EA /* twitpic */,
+				6F6B88FE1C5E66DA003B749B /* latteshare */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -762,6 +782,7 @@
 				2A05020312F49DF0000F74EA /* MobileMe */,
 				2ACA5CC2160E75F000F294C2 /* TinyGrab */,
 				2A0503D112F4D4AA000F74EA /* twitpic */,
+				6F6B88EF1C5E6487003B749B /* latteshare */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -819,6 +840,7 @@
 				2A05020112F49DDD000F74EA /* MobileMe */,
 				2ACA5CEA160E782700F294C2 /* TinyGrab */,
 				2A0503CF12F4D49E000F74EA /* twitpic */,
+				6F6B88F51C5E64BF003B749B /* latteshare */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -860,6 +882,40 @@
 				2A28113F12EBCDFC00435C36 /* Events.png */,
 			);
 			path = Preferences;
+			sourceTree = "<group>";
+		};
+		6F6B88EF1C5E6487003B749B /* latteshare */ = {
+			isa = PBXGroup;
+			children = (
+				6F6B88FA1C5E6502003B749B /* MEXLatteSharePlugin.h */,
+				6F6B88FB1C5E6502003B749B /* MEXLatteSharePlugin.m */,
+			);
+			name = latteshare;
+			sourceTree = "<group>";
+		};
+		6F6B88F51C5E64BF003B749B /* latteshare */ = {
+			isa = PBXGroup;
+			children = (
+				6F6B88F61C5E64BF003B749B /* Info.plist */,
+				6F6B89001C5E675C003B749B /* LatteShareAccountPane.xib */,
+			);
+			name = latteshare;
+			path = ../latteshare;
+			sourceTree = "<group>";
+		};
+		6F6B88FD1C5E66BD003B749B /* latteshare */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = latteshare;
+			sourceTree = "<group>";
+		};
+		6F6B88FE1C5E66DA003B749B /* latteshare */ = {
+			isa = PBXGroup;
+			children = (
+				6F6B88FF1C5E6709003B749B /* prefix.pch */,
+			);
+			name = latteshare;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -984,6 +1040,23 @@
 			productReference = 2ACA5CC7160E763A00F294C2 /* TinyGrab.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
+		6F6B88F31C5E64BF003B749B /* latteshare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F6B88F71C5E64BF003B749B /* Build configuration list for PBXNativeTarget "latteshare" */;
+			buildPhases = (
+				6F6B88F01C5E64BF003B749B /* Sources */,
+				6F6B88F11C5E64BF003B749B /* Frameworks */,
+				6F6B88F21C5E64BF003B749B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = latteshare;
+			productName = latteshare;
+			productReference = 6F6B88F41C5E64BF003B749B /* latteshare.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 		8D1107260486CEB800E47090 /* CocoaShare */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "CocoaShare" */;
@@ -1018,6 +1091,11 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				TargetAttributes = {
+					6F6B88F31C5E64BF003B749B = {
+						CreatedOnToolsVersion = 7.2;
+					};
+				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "CocoaShare" */;
 			compatibilityVersion = "Xcode 3.1";
@@ -1040,6 +1118,7 @@
 			targets = (
 				8D1107260486CEB800E47090 /* CocoaShare */,
 				2A48847512E6768D001618B5 /* HTTP */,
+				6F6B88F31C5E64BF003B749B /* latteshare */,
 				2A0C8C9312EF844F00A75AB7 /* FTP */,
 				2A2F994412F094710069B37E /* SFTP */,
 				2A5C1AF212F2FA6F005153FA /* WebDav */,
@@ -1107,6 +1186,14 @@
 			files = (
 				2ACA5CF1160E782700F294C2 /* TinyGrabAccountPane.xib in Resources */,
 				2ACA5CF3160E782700F294C2 /* tinygrab.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F6B88F21C5E64BF003B749B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F6B89011C5E675C003B749B /* LatteShareAccountPane.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1213,6 +1300,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				2ACA5CD8160E76C700F294C2 /* MGMTinyGrabPlugIn.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F6B88F01C5E64BF003B749B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F6B88FC1C5E6502003B749B /* MEXLatteSharePlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1852,6 +1947,99 @@
 			};
 			name = Release;
 		};
+		6F6B88F81C5E64BF003B749B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = latteshare/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.edr.latteshare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		6F6B88F91C5E64BF003B749B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = latteshare/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = io.edr.latteshare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2001,6 +2189,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		6F6B88F71C5E64BF003B749B /* Build configuration list for PBXNativeTarget "latteshare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F6B88F81C5E64BF003B749B /* Debug */,
+				6F6B88F91C5E64BF003B749B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "CocoaShare" */ = {
 			isa = XCConfigurationList;
