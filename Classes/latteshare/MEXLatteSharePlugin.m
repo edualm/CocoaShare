@@ -299,13 +299,10 @@ const BOOL MGMHTTPResponseInvisible = YES;
     NSMutableArray *idArray = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < currentMultiUpload.count; i++)
-        [idArray addObject:[[[currentMultiUpload objectAtIndex:0] componentsSeparatedByString:@"/"] lastObject]];
+        [idArray addObject:[[[currentMultiUpload objectAtIndex:i] componentsSeparatedByString:@"/"] lastObject]];
     
-    MGMJSON *json = [[MGMJSON alloc] init];
+    NSString *ret = [idArray JSONValue];
     
-    NSString *ret = [json writeArray:idArray];
-    
-    [json release];
     [idArray release];
     
     return ret;
@@ -323,8 +320,8 @@ const BOOL MGMHTTPResponseInvisible = YES;
     
     MGMURLBasicHandler *handler = [MGMURLBasicHandler handlerWithRequest:request delegate:self];
     
-    [handler setFailWithError:@selector(check:didFailWithError:)];
-    [handler setFinish:@selector(checkDidFinish:)];
+    [handler setFailWithError:@selector(group:didFailWithError:)];
+    [handler setFinish:@selector(groupDidFinish:)];
     [handler setInvisible:MGMHTTPResponseInvisible];
     
     [[[MGMController sharedController] connectionManager] addHandler:handler];
@@ -333,8 +330,6 @@ const BOOL MGMHTTPResponseInvisible = YES;
     
     [currentMultiUpload release];
     currentMultiUpload = nil;
-    
-    
 }
 
 - (void)group:(MGMURLBasicHandler *)theHandler didFailWithError:(NSError *)theError {
