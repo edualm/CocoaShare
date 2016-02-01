@@ -32,6 +32,7 @@ NSString * const MEXJSONURLKey = @"url";
 NSString * const MEXAPILogin = @"/api/v1/key";
 NSString * const MEXAPIVerify = @"/api/v1/key";
 NSString * const MEXAPIUpload = @"/api/v1/upload";
+NSString * const MEXAPIGroup = @"/api/v1/group";
 
 const BOOL MGMHTTPResponseInvisible = YES;
 
@@ -221,7 +222,7 @@ const BOOL MGMHTTPResponseInvisible = YES;
     }
 }
 
-- (void)sendFileAtPath:(NSString *)thePath withName:(NSString *)theName {
+- (void)sendFileAtPath:(NSString *)thePath withName:(NSString *)theName multiUpload:(int)multiUploadState {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     if ([defaults objectForKey:MEXLatteURL] == nil || [[defaults objectForKey:MEXLatteURL] isEqual:@""]) {
@@ -230,6 +231,12 @@ const BOOL MGMHTTPResponseInvisible = YES;
         [[MGMController sharedController] upload:thePath receivedError:error];
         
         return;
+    }
+    
+    if (multiUploadState == 1) {
+        performingMultiUpload = true;
+        
+        currentMultiUpload = [[NSMutableArray alloc] init];
     }
     
     srandomdev();
@@ -270,6 +277,9 @@ const BOOL MGMHTTPResponseInvisible = YES;
     
     if (response != nil) {
         if ([[response objectForKey:MEXJSONSuccessKey] boolValue]) {
+            if (performingMultiUpload)
+                [currentMultiUpload addObject:[response objectForKey:MEXJSONURLKey]];
+            
             [[MGMController sharedController] uploadFinished:[theHandler object] url:[NSURL URLWithString:[response objectForKey:MEXJSONURLKey]]];
         } else {
             NSError *error = [NSError errorWithDomain:[[NSBundle bundleForClass:[self class]] bundleIdentifier] code:1 userInfo:[NSDictionary dictionaryWithObject:[response objectForKey:MEXJSONErrorKey] forKey:NSLocalizedDescriptionKey]];
@@ -277,10 +287,80 @@ const BOOL MGMHTTPResponseInvisible = YES;
             [[MGMController sharedController] upload:[theHandler object] receivedError:error];
         }
     } else {
+        NSLog(@"%@", theHandler.string);
+        
         NSError *error = [NSError errorWithDomain:[[NSBundle bundleForClass:[self class]] bundleIdentifier] code:1 userInfo:[NSDictionary dictionaryWithObject:[@"Invalid response." localizedFor:self] forKey:NSLocalizedDescriptionKey]];
         
         [[MGMController sharedController] upload:[theHandler object] receivedError:error];
     }
+}
+
+- (NSString *)multiUploadArrayToIdJSONArray {
+    NSMutableArray *idArray = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < currentMultiUpload.count; i++)
+        [idArray addObject:[[[currentMultiUpload objectAtIndex:0] componentsSeparatedByString:@"/"] lastObject]];
+    
+    MGMJSON *json = [[MGMJSON alloc] init];
+    
+    NSString *ret = [json writeArray:idArray];
+    
+    [json release];
+    [idArray release];
+    
+    return ret;
+}
+
+- (void)createMultiUploadPage {
+    NSLog(@"%@", currentMultiUpload);
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [defaults objectForKey:MEXLatteURL], MEXAPIGroup]]];
+    
+    [request setHTTPMethod:MGMHTTPPostMethod];
+    [request setValue:MGMHTTPURLForm forHTTPHeaderField:MGMHTTPContentType];
+    [request setHTTPBody:[[NSString stringWithFormat:@"username=%@&apiKey=%@&ids=%@", [[defaults objectForKey:MEXLatteUser] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding], [[defaults objectForKey:MEXLatteKey] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding], [self multiUploadArrayToIdJSONArray]] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    MGMURLBasicHandler *handler = [MGMURLBasicHandler handlerWithRequest:request delegate:self];
+    
+    [handler setFailWithError:@selector(check:didFailWithError:)];
+    [handler setFinish:@selector(checkDidFinish:)];
+    [handler setInvisible:MGMHTTPResponseInvisible];
+    
+    [[[MGMController sharedController] connectionManager] addHandler:handler];
+    
+    performingMultiUpload = false;
+    
+    [currentMultiUpload release];
+    currentMultiUpload = nil;
+    
+    
+}
+
+- (void)group:(MGMURLBasicHandler *)theHandler didFailWithError:(NSError *)theError {
+    [[MGMController sharedController] upload:[theHandler object] receivedError:theError];
+}
+
+- (void)groupDidFinish:(MGMURLBasicHandler *)theHandler {
+    NSDictionary *response = [[theHandler string] parseJSON];
+    
+    if (response != nil) {
+        if ([[response objectForKey:MEXJSONSuccessKey] boolValue])
+            [[MGMController sharedController] multiUploadPageCreated:[NSURL URLWithString:[response objectForKey:MEXJSONURLKey]]];
+        else {
+            NSError *error = [NSError errorWithDomain:[[NSBundle bundleForClass:[self class]] bundleIdentifier] code:1 userInfo:[NSDictionary dictionaryWithObject:[response objectForKey:MEXJSONErrorKey] forKey:NSLocalizedDescriptionKey]];
+            
+            [[MGMController sharedController] upload:[theHandler object] receivedError:error];
+        }
+    } else {
+        NSLog(@"%@", theHandler.string);
+        
+        NSError *error = [NSError errorWithDomain:[[NSBundle bundleForClass:[self class]] bundleIdentifier] code:1 userInfo:[NSDictionary dictionaryWithObject:[@"Invalid response." localizedFor:self] forKey:NSLocalizedDescriptionKey]];
+        
+        [[MGMController sharedController] upload:[theHandler object] receivedError:error];
+    }
+    
+    
 }
 
 @end

@@ -8,7 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MEXLatteSharePlugin : NSObject {
+#import "MGMPlugInProtocol.h"
+
+@interface MEXLatteSharePlugin : NSObject <MGMPlugInProtocol> {
     IBOutlet NSView *view;
     
     IBOutlet NSTextField *urlField;
@@ -18,13 +20,9 @@
     IBOutlet NSButton *loginButton;
     
     BOOL userLoggingIn;
+    BOOL performingMultiUpload;
+    
+    NSMutableArray *currentMultiUpload;
 }
-
-- (void)releaseView;
-
-- (void)lockLogin;
-- (void)unlockLogin;
-
-- (IBAction)login:(id)sender;
 
 @end
